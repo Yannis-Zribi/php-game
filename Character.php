@@ -77,6 +77,44 @@ class Character{
         );
     }
 
+    public function setLifePoints(float $lifePoints)
+    {
+        if ($lifePoints < 0) {
+            $this->lifePoints = 0;
+        } else {
+            $this->lifePoints = round($lifePoints, 2);
+        }
+    }
+
+    public function attacks(Character $character)
+    {
+        // echo "{$this} attaque {$character}";
+        if ($this->hasWeapon()) {
+        //     echo " avec {$this->weapon}";
+        }
+        // echo " !".PHP_EOL;
+
+        $character->takesDamagesFrom($this);
+    }
+    
+    public function takesDamagesFrom(Character $character)
+    {
+        $damages = $this->takesPhysicalDamagesFrom($character) + $this->takesMagicalDamagesFrom($character);
+        $this->setLifePoints(
+            $this->getLifePoints() - ($damages * (1 - $this->getDefensePoints()))
+        );
+    }
+
+    protected function takesPhysicalDamagesFrom(Character $character)
+    {
+        return $character->getAttackDamages();
+    }
+
+    protected function takesMagicalDamagesFrom(Character $character)
+    {
+        return $character->getMagicDamages();
+    }
+
     public function __toString()
     {
         return static::class;
