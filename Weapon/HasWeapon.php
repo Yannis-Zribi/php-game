@@ -1,7 +1,6 @@
 <?php
 
 
-use Weapon;
 
 trait HasWeapon
 {

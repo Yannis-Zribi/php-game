@@ -1,6 +1,8 @@
 <?php
 
-class Character{
+require_once("./../Type.php");
+
+class Character implements Type{
 
     public function __construct(
         protected string $name,
@@ -18,7 +20,6 @@ class Character{
     ){}
 
     //Getters
-
     public function getName(){
         return $this->name;
     }
@@ -86,18 +87,29 @@ class Character{
         }
     }
 
-    public function attacks(Character $character)
+    public function attacks(Character $character, ?Weapon $attackerWeapon = null, ?AttackSpell $attackerSpell = null)
     {
-        // echo "{$this} attaque {$character}";
+        print("{$this->getName()} attaque {$character->getName()}");
         if ($this->hasWeapon()) {
-        //     echo " avec {$this->weapon}";
+            print(" avec {$this->weapon->getName()}");
         }
-        // echo " !".PHP_EOL;
+        print(" !".PHP_EOL);
 
-        $character->takesDamagesFrom($this);
+        //attaque avec un spell
+        if (is_null($attackerWeapon) && !is_null($attackerSpell)) {
+            $character->takesDamagesFrom($this, $attackerSpell);
+
+        //attaque avec une arme
+        }elseif(!is_null($attackerWeapon) && is_null($attackerSpell)){
+            $character->takesDamagesFrom($this, $attackerWeapon);
+
+        //attaque a la mano
+        }else{
+            $character->takesDamagesFrom($this);
+        }
     }
     
-    public function takesDamagesFrom(Character $character)
+    public function takesDamagesFrom(Character $character, ?Weapon $attackerWeapon, ?AttackSpell $attackerSpell)
     {
         $damages = $this->takesPhysicalDamagesFrom($character) + $this->takesMagicalDamagesFrom($character);
         $this->setLifePoints(
@@ -107,7 +119,7 @@ class Character{
 
     protected function takesPhysicalDamagesFrom(Character $character)
     {
-        return $character->getAttackDamages();
+        return ($character->getAttackDamages() + $character->get);
     }
 
     protected function takesMagicalDamagesFrom(Character $character)
@@ -119,16 +131,4 @@ class Character{
     {
         return static::class;
     }
-
-
-
-
-
-
-
-
-
-
-
-
 }
