@@ -1,7 +1,7 @@
 <?php
 
 
-use git Weapon;
+use Weapon;
 
 trait HasWeapon
 {
