@@ -3,10 +3,18 @@
 class Archer extends Character
 {
     public function __construct(
-        float $health,
-        float $defenseRatio,
-        int $attackDamages,
-        int $magicDamages,
+         string $name,
+         string $type,
+         float $lifePoints,
+         float $manaPoints,
+         float $physicalAttackPoints,
+         float $magicalAttackPoints,
+         float $defensePoints,
+         ?Weapon $weapon = NULL,
+         Spell $attackSpell,
+         Spell $defenseSpell,
+         Spell $healSpell,
+
     )
     {
         if ($magicDamages > $attackDamages) {
