@@ -109,7 +109,7 @@ class Character implements Type{
         }
     }
     
-    public function takesDamagesFrom(Character $character, ?Weapon $attackerWeapon, ?AttackSpell $attackerSpell)
+    public function takesDamagesFrom(Character $character, ?Weapon $attackerWeapon = null, ?AttackSpell $attackerSpell = null)
     {
         $damages = $this->takesPhysicalDamagesFrom($character) + $this->takesMagicalDamagesFrom($character);
         $this->setLifePoints(
