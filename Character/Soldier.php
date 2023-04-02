@@ -15,7 +15,7 @@
 //     ____O
 //   _/   |
 
-require_once("./Character.php");
+require_once("./Character/Character.php");
 
 
 Class Soldier extends Character{

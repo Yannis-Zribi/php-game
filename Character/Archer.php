@@ -10,10 +10,10 @@ class Archer extends Character
          float $physicalAttackPoints,
          float $magicalAttackPoints,
          float $defensePoints,
-         ?Weapon $weapon = NULL,
          Spell $attackSpell,
          Spell $defenseSpell,
          Spell $healSpell,
+         ?Weapon $weapon = NULL,
 
     )
     {

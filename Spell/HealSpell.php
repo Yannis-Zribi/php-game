@@ -1,6 +1,6 @@
 <?php
 
-require_once("./Spell.php");
+require_once("./Spell/Spell.php");
 
 Class HealSpell extends Spell{
 

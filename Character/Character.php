@@ -1,8 +1,16 @@
 <?php
 
-require_once("./../Type.php");
+require_once("./Type.php");
+require_once("./Weapon/HasWeapon.php");
+require_once("./Weapon/Weapon.php");
+require_once("./Spell/AttackSpell.php");
+require_once("./Spell/DefenseSpell.php");
+require_once("./Spell/HealSpell.php");
 
-class Character implements Type{
+class Character{
+
+    use Type;
+    use HasWeapon;
 
     public function __construct(
         protected string $name,
@@ -12,10 +20,10 @@ class Character implements Type{
         protected float $physicalAttackPoints,
         protected float $magicalAttackPoints,
         protected float $defensePoints,
+        protected AttackSpell $attackSpell,
+        protected DefenseSpell $defenseSpell,
+        protected HealSpell $healSpell,
         protected ?Weapon $weapon = NULL,
-        protected Spell $attackSpell,
-        protected Spell $defenseSpell,
-        protected Spell $healSpell,
 
     ){}
 
@@ -65,8 +73,7 @@ class Character implements Type{
     }
 
     //Setters
-    public function isDead()
-    {
+    public function isDead(){
         return $this->lifePoints == 0;
     }
 
@@ -119,12 +126,12 @@ class Character implements Type{
 
     protected function takesPhysicalDamagesFrom(Character $character)
     {
-        return ($character->getAttackDamages() + $character->get);
+        return ($character->getPhysicalAttackPoints());
     }
 
     protected function takesMagicalDamagesFrom(Character $character)
     {
-        return $character->getMagicDamages();
+        return $character->getMagicalAttackPoints();
     }
 
     public function __toString()
