@@ -9,4 +9,13 @@ abstract Class Spell{
         private string $description,
         private float $manaCost
     ){}
+
+    public function getName(){
+        return $this->name;
+    }
+    
+    public function __toString()
+    {
+        return static::class;
+    }
 }

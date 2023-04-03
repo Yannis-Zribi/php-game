@@ -14,9 +14,6 @@ Class DefenseSpell extends Spell{
         parent::__construct($name, $description, $manaCost);
     }
 
-    public function getName(){
-        return $this->name;
-    }
 
     public function getDescription(){
         return $this->description;
@@ -29,9 +26,4 @@ Class DefenseSpell extends Spell{
     public function getDefensePoints(){
         return $this->defensePoints;
     }
-
-    
-
-    
-
 }

@@ -72,6 +72,15 @@ class Character{
         return $this->healSpell;
     }
 
+    public function getDescription(){
+
+        print(PHP_EOL.$this->name." est de type {$this->type}, il a {$this->lifePoints} points de vie et {$this->manaPoints} points de mana.".PHP_EOL);
+        print("Il a {$this->physicalAttackPoints} de dégâts physiques et {$this->magicalAttackPoints} de dégâts magiques. Son arme est {$this->weapon->getName()}".PHP_EOL);
+        print("Ses spells sont : ".PHP_EOL);
+        print("[*] - {$this->attackSpell->getName()}".PHP_EOL."[*] - {$this->defenseSpell->getName()}".PHP_EOL."[*] - {$this->healSpell->getName()}".PHP_EOL.PHP_EOL);
+
+    }
+
     //Setters
     public function isDead(){
         return $this->lifePoints == 0;

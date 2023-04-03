@@ -15,9 +15,6 @@ Class AttackSpell extends Spell{
         parent::__construct($name, $description, $manaCost);
     }
 
-    public function getName(){
-        return $this->name;
-    }
 
     public function getDescription(){
         return $this->Description;

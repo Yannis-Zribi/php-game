@@ -17,4 +17,9 @@ abstract class Weapon{
     public function getDescription(){
         return $this->description;
     }
+
+    public function __toString()
+    {
+        return static::class;
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 
-class Archer extends Character
+class Wizard extends Character
 {
     public function __construct(
          string $name,
@@ -18,7 +18,7 @@ class Archer extends Character
     )
     {
         if ($magicalAttackPoints > $physicalAttackPoints) {
-            throw new Exception("The archer cannot have more magic damages than physical damages.");
+            throw new Exception("The Wizard cannot have more magic damages than physical damages.");
         }
         parent::__construct($name, $type, $lifePoints, $manaPoints, $physicalAttackPoints, $magicalAttackPoints, $defensePoints, $attackSpell, $defenseSpell, $healSpell, $weapon);
     }
@@ -27,7 +27,7 @@ class Archer extends Character
     {
         if (chance(20)) {
             // echo "Coup critique !".PHP_EOL;
-            return $this->physicalAttackPoints * 1.2;
+            return $this->physicalAttackPoints*1.2;
         }
         return parent::getAttackDamages();
     }
