@@ -139,6 +139,15 @@ class Character{
         }
     }
 
+    public function setManaPoint(float $manaPoints){
+        
+        if ($manaPoints < 0) {
+            $this->manaPoints = 0;
+        } else {
+            $this->manaPoints = round($manaPoints, 2);
+        }
+    }
+
     public function attacks(Character $character)
     {
         print("{$this->getName()} attaque {$character->getName()}");
@@ -173,6 +182,10 @@ class Character{
                 $damages =  (($character->getPhysicalAttackPoints() + $character->getAttackSpell()->getPhysicalDamages()) +
                             ($character->getMagicalAttackPoints() + $character->getAttackSpell()->getMagicalDamages())) *
                             advantage($this->getType(), $character->getType());
+                
+                // $this->setManaPoint(
+                //     $this->getManaPoints() - $this->attackSpell->getManaCost();
+                // )
 
             }else{
                 //sinon il attaque avec son arme
@@ -195,7 +208,9 @@ class Character{
         $this->setLifePoints(
             $this->getLifePoints() - ($damages * (1 - $this->getDefensePoints()))
         );
+        
     }
+
 
     // protected function takesPhysicalDamagesFrom(Character $character)
     // {
