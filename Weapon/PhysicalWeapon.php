@@ -12,7 +12,7 @@ class PhysicalWeapon extends Weapon{
         parent::__construct($name, $description);
     }
 
-    public function getPhysicallDamages(){
+    public function getPhysicalDamages(){
         return $this->physicalDamages;
     }
 

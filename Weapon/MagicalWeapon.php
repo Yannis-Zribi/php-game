@@ -12,7 +12,7 @@ class MagicalWeapon extends Weapon{
         parent::__construct($name, $description);
     }
 
-    public function getmagicallDamages(){
+    public function getMagicalDamages(){
         return $this->magicalDamages;
     }
 

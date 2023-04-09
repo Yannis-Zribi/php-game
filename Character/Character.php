@@ -32,7 +32,7 @@ class Character{
         return $this->name;
     }
 
-    public function gettype(){
+    public function getType(){
         return $this->type;
     }
 
@@ -45,6 +45,8 @@ class Character{
     }
 
     public function getPhysicalAttackPoints(){
+
+        if(is_null($this->spell))
         return $this->physicalAttackPoints;
     }
 
@@ -139,7 +141,7 @@ class Character{
         }
     }
 
-    public function attacks(Character $character, ?Weapon $attackerWeapon = null, ?AttackSpell $attackerSpell = null)
+    public function attacks(Character $character)
     {
         print("{$this->getName()} attaque {$character->getName()}");
         if ($this->hasWeapon()) {
@@ -147,37 +149,80 @@ class Character{
         }
         print(" !".PHP_EOL);
 
-        //attaque avec un spell
-        if (is_null($attackerWeapon) && !is_null($attackerSpell)) {
-            $character->takesDamagesFrom($this, $attackerSpell);
+        //character attaque this
+        $character->takesDamagesFrom($this, $this->attackSpell);
 
-        //attaque avec une arme
-        }elseif(!is_null($attackerWeapon) && is_null($attackerSpell)){
-            $character->takesDamagesFrom($this, $attackerWeapon);
-
-        //attaque a la mano
-        }else{
-            $character->takesDamagesFrom($this);
-        }
     }
     
-    public function takesDamagesFrom(Character $character, ?Weapon $attackerWeapon = null, ?AttackSpell $attackerSpell = null)
+    public function takesDamagesFrom(Character $character)
     {
-        $damages = $this->takesPhysicalDamagesFrom($character) + $this->takesMagicalDamagesFrom($character);
+        
+        if(is_null($character->weapon) || $character->getWeapon() != "PhysicalWeapon"){
+
+            // return les dégat sur perso + son spell
+            print($character->getName()." attaque avec son spell".PHP_EOL);
+
+            $damages =  (($character->getPhysicalAttackPoints() + $character->getAttackSpell()->getPhysicalDamages()) +
+                        ($character->getMagicalAttackPoints() + $character->getAttackSpell()->getMagicalDamages())) *
+                        advantage($this->getType(), $character->getType());
+
+        }else{
+            if(rand(0,1) == 1){
+                //si rand = 1, il attaque avec son spell
+                
+                print($character->getName()." attaque avec son spell".PHP_EOL);
+
+                $damages =  (($character->getPhysicalAttackPoints() + $character->getAttackSpell()->getPhysicalDamages()) +
+                            ($character->getMagicalAttackPoints() + $character->getAttackSpell()->getMagicalDamages())) *
+                            advantage($this->getType(), $character->getType());
+
+            }else{
+                //sinon il attaque avec son arme
+                
+                print($character->getName()." attaque avec son arme".PHP_EOL);
+
+                if($character->getWeapon() == "PhysicalWeapon"){
+                    $damages =  (($character->getPhysicalAttackPoints() + $character->getWeapon()->getPhysicalDamages()) +
+                                ($character->getMagicalAttackPoints())) *
+                                advantage($this->getType(), $character->getType());
+
+                }else{
+                    $damages =  (($character->getPhysicalAttackPoints()) +
+                                ($character->getMagicalAttackPoints() + $character->getWeapon()->getMagicalDamages())) *
+                                advantage($this->getType(), $character->getType());
+                }
+            }
+        }
+        
         $this->setLifePoints(
             $this->getLifePoints() - ($damages * (1 - $this->getDefensePoints()))
         );
     }
 
-    protected function takesPhysicalDamagesFrom(Character $character)
-    {
-        return ($character->getPhysicalAttackPoints());
-    }
+    // protected function takesPhysicalDamagesFrom(Character $character)
+    // {
+    //     if(is_null($character->weapon) || $character->getWeapon() != "PhysicalWeapon"){
 
-    protected function takesMagicalDamagesFrom(Character $character)
-    {
-        return $character->getMagicalAttackPoints();
-    }
+    //         // return les dégat sur perso + son spell
+    //         print($character->getName()." attaque avec son spell".PHP_EOL);
+    //         return ($character->getPhysicalAttackPoints() + $character->attackSpell->getPhysicalDamages());
+
+    //     }else{
+    //         if(rand(0,1) == 1){
+    //             //si rand = 1, il attaque avec son spell
+    //         return ($character->getPhysicalAttackPoints() + $character->attackSpell->getPhysicalDamages());
+
+    //         }else{
+    //             //sinon il attaque avec son arme
+    //         return ($character->getPhysicalAttackPoints() + $character->weapon->getPhysicalDamages());
+    //         }
+    //     }
+    // }
+
+    // protected function takesMagicalDamagesFrom(Character $character)
+    // {
+    //     return $character->getMagicalAttackPoints();
+    // }
 
     public function __toString()
     {
