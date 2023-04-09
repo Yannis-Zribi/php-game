@@ -81,6 +81,42 @@ class Character{
 
     }
 
+
+    function drawStats(){
+
+        //affichage de son nom
+        print($this->getName().PHP_EOL);
+
+        //affichage de la vie
+        $life = (int)($this->getLifePoints() / 10) + 1;
+
+        print("LIFE : [");
+        for ($i = 0; $i < 10; $i++) {
+            if ($life > 0) {
+                print("\e[31m=");
+            }else {
+                print(" ");
+            }
+            $life -= 1;
+        }
+        print("\e[39m]".$this->getLifePoints().PHP_EOL);
+
+
+        //affichage de la mana
+        $mana = (int)($this->getManaPoints() / 10) + 1;
+
+        print("MANA : [");
+        for ($i = 0; $i < 10; $i++) {
+            if ($mana > 0) {
+                print("\e[34m=");
+            }else {
+                print(" ");
+            }
+            $mana -= 1;
+        }
+        print("\e[39m]".$this->getManaPoints().PHP_EOL);
+    }
+
     //Setters
     public function isDead(){
         return $this->lifePoints == 0;

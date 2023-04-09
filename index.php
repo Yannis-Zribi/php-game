@@ -14,6 +14,14 @@ require_once("./Weapon/MagicalWeapon.php");
 require_once("./Weapon/PhysicalWeapon.php");
 
 
+
+
+//Fonctions
+
+
+
+
+
 //Création des spell
 $thunderstorm = new AttackSpell("Thunderstrom", "This is a thunderstorm.", 8, 16, 14);
 $fireBall = new AttackSpell("Fire ball", "This is a fire ball.", 6, 12, 15);
@@ -42,7 +50,7 @@ $baguetteMagique = new MagicalWeapon("la Baguette", "c'est la baguette de merlin
 $weapons = [$baton, $baguetteMagique];
 
 //Création des Personnages
-// $archer = new Archer("Miguel", "Feu", 100, 100, 10, 10, 0.2, $fireBall, $protectiveShield, $rapidRegeneration, $baton);
+$archer = new Archer("Miguel", "Feu", 80, 100, 10, 10, 0.2, $fireBall, $protectiveShield, $rapidRegeneration, $baton);
 // $soldier = new Character("Hervé", "Eau", 100, 100, 8, 10, 0.3, $thunderstorm, $lightningReflexes, $healingWave, $baton);
 // $wizard = new Wizard("Damien","Plante",100,100,6,10,0.2, $thunderstorm, $protectiveShield, $healingWave, $baguetteMagique);
 
@@ -102,21 +110,21 @@ $choosed = 0;
 
 do {
 
-    $character = (int)(readline());
+    $player = (int)(readline());
     
     switch ($character) {
         case '1': //archer
-            $character = new Archer($name, $types[$type], 100, 100, 5, 5, (rand(10, 30) / 100), $attackSpells[rand(0,1)], $defenseSpells[rand(0,1)], $healSpells[rand(0,1)], $weapons[$weapon - 1]);
+            $player = new Archer($name, $types[$type], 100, 100, 5, 5, (rand(10, 30) / 100), $attackSpells[rand(0,1)], $defenseSpells[rand(0,1)], $healSpells[rand(0,1)], $weapons[$weapon - 1]);
             $choosed = 1;
             break;
         
         case '2': //soldat
-            $character = new Soldier($name, $types[$type], 100, 100, 10, 0, (rand(10, 30) / 100), $attackSpells[rand(0,1)], $defenseSpells[rand(0,1)], $healSpells[rand(0,1)], $weapons[$weapon - 1]);
+            $player = new Soldier($name, $types[$type], 100, 100, 10, 0, (rand(10, 30) / 100), $attackSpells[rand(0,1)], $defenseSpells[rand(0,1)], $healSpells[rand(0,1)], $weapons[$weapon - 1]);
             $choosed = 1;
             break;
     
         case '3': //sorcier
-            $character = new Wizard($name, $types[$type], 100, 100, 0, 10, (rand(10, 30) / 100), $attackSpells[rand(0,1)], $defenseSpells[rand(0,1)], $healSpells[rand(0,1)], $weapons[$weapon - 1]);
+            $player = new Wizard($name, $types[$type], 100, 100, 0, 10, (rand(10, 30) / 100), $attackSpells[rand(0,1)], $defenseSpells[rand(0,1)], $healSpells[rand(0,1)], $weapons[$weapon - 1]);
             $choosed = 1;
             break;
             
@@ -127,4 +135,29 @@ do {
 } while ($choosed == 0);
 
 
-$character->getDescription();
+
+
+//création du bot
+switch (rand(1,3)) {
+    case '1': //archer
+        $bot = new Archer("BOT", $types[rand(0,2)], 100, 100, 5, 5, (rand(10, 30) / 100), $attackSpells[rand(0,1)], $defenseSpells[rand(0,1)], $healSpells[rand(0,1)], $weapons[rand(0,1)]);
+        $choosed = 1;
+        break;
+    
+    case '2': //soldat
+        $bot = new Soldier("BOT", $types[rand(0,2)], 100, 100, 10, 0, (rand(10, 30) / 100), $attackSpells[rand(0,1)], $defenseSpells[rand(0,1)], $healSpells[rand(0,1)], $weapons[rand(0,1)]);
+        $choosed = 1;
+        break;
+
+    case '3': //sorcier
+        $bot = new Wizard("BOT", $types[rand(0,2)], 100, 100, 0, 10, (rand(10, 30) / 100), $attackSpells[rand(0,1)], $defenseSpells[rand(0,1)], $healSpells[rand(0,1)], $weapons[rand(0,1)]);
+        $choosed = 1;
+        break;
+        
+    default:
+        # code...
+        break;
+}
+
+
+
