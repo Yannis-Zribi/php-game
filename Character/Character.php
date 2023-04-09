@@ -45,8 +45,6 @@ class Character{
     }
 
     public function getPhysicalAttackPoints(){
-
-        if(is_null($this->spell))
         return $this->physicalAttackPoints;
     }
 

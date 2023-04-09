@@ -112,7 +112,7 @@ do {
 
     $player = (int)(readline());
     
-    switch ($character) {
+    switch ($player) {
         case '1': //archer
             $player = new Archer($name, $types[$type], 100, 100, 5, 5, (rand(10, 30) / 100), $attackSpells[rand(0,1)], $defenseSpells[rand(0,1)], $healSpells[rand(0,1)], $weapons[$weapon - 1]);
             $choosed = 1;
@@ -159,5 +159,12 @@ switch (rand(1,3)) {
         break;
 }
 
+$player->drawStats();
+$bot->drawStats();
 
+$player->attacks($bot);
+
+
+$player->drawStats();
+$bot->drawStats();
 
