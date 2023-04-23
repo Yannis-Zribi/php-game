@@ -114,7 +114,7 @@ class Character{
             }
             $mana -= 1;
         }
-        print("\e[39m]".$this->getManaPoints().PHP_EOL);
+        print("\e[39m]".$this->getManaPoints().PHP_EOL.PHP_EOL);
     }
 
     //Setters
@@ -139,13 +139,13 @@ class Character{
         }
     }
 
+    public function manaRegen(){
+        $this->manaPoints += 10;
+    }
+
     public function attacks(Character $character)
     {
-        print("{$this->getName()} attaque {$character->getName()}");
-        if ($this->hasWeapon()) {
-            print(" avec {$this->weapon->getName()}");
-        }
-        print(" !".PHP_EOL);
+        print("{$this->getName()} attaque {$character->getName()} !".PHP_EOL);
 
         //character attaque this
         $character->takesDamagesFrom($this, $this->attackSpell);
@@ -172,7 +172,7 @@ class Character{
 
                 $damages =  (($character->getPhysicalAttackPoints() + $character->getAttackSpell()->getPhysicalDamages()) +
                             ($character->getMagicalAttackPoints() + $character->getAttackSpell()->getMagicalDamages())) *
-                            advantage($this->getType(), $character->getType());
+                            $this->advantage($this->getType(), $character->getType());
 
             }else{
                 //sinon il attaque avec son arme

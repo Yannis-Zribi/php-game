@@ -159,6 +159,34 @@ switch (rand(1,3)) {
         break;
 }
 
+
+//boucle de jeu
+$characters = [$player, $bot];
+
+$play = 1;
+
+while ($play) {
+    //affichage des stats
+    $player->drawStats();
+    $bot->drawStats();
+
+    //choix du perso qui attaque en premier
+    $attacker = rand(0,1);
+    $attackee = 1 - $attacker;
+
+    //attaques lancées
+    $characters[$attacker]->attacks($characters[$attackee]);
+    $characters[$attackee]->attacks($characters[$attacker]);
+
+
+    //regen de la mana
+    foreach ($characters as $key => $character) {
+        $character->manaRegen();
+    }
+
+
+}
+
 $player->drawStats();
 $bot->drawStats();
 
@@ -167,4 +195,5 @@ $player->attacks($bot);
 
 $player->drawStats();
 $bot->drawStats();
+
 

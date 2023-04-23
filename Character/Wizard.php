@@ -17,7 +17,8 @@ class Wizard extends Character
 
     )
     {
-        if ($magicalAttackPoints > $physicalAttackPoints) {
+
+        if ($magicalAttackPoints < $physicalAttackPoints) {
             throw new Exception("The Wizard cannot have more magic damages than physical damages.");
         }
         parent::__construct($name, $type, $lifePoints, $manaPoints, $physicalAttackPoints, $magicalAttackPoints, $defensePoints, $attackSpell, $defenseSpell, $healSpell, $weapon);

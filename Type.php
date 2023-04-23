@@ -2,8 +2,7 @@
 
 
 Trait Type{
-
-
+    
     public function advantage(string $attackeeType, string $attackerType){
         switch ($attackerType) {
             case 'Feu':
