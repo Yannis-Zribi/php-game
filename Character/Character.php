@@ -1,11 +1,13 @@
 <?php
 
-require_once("./Type.php");
-require_once("./Weapon/HasWeapon.php");
-require_once("./Weapon/Weapon.php");
-require_once("./Spell/AttackSpell.php");
-require_once("./Spell/DefenseSpell.php");
-require_once("./Spell/HealSpell.php");
+require_once __DIR__ . "/../Type.php";
+require_once __DIR__ . "/../Weapon/HasWeapon.php";
+require_once __DIR__ . "/../Weapon/Weapon.php";
+require_once __DIR__ . "/../Spell/AttackSpell.php";
+require_once __DIR__ . "/../Spell/DefenseSpell.php";
+require_once __DIR__ . "/../Spell/HealSpell.php";
+
+
 
 class Character{
 
@@ -139,88 +141,100 @@ class Character{
         }
     }
 
+    public function setManaPoints(float $manaPoints)
+    {
+        if ($manaPoints < 0) {
+            $this->manaPoints = 0;
+        } else {
+            $this->manaPoints = round($manaPoints, 2);
+        }
+    }
+
     public function manaRegen(){
         $this->manaPoints += 10;
     }
 
     public function attacks(Character $character)
     {
-        print("{$this->getName()} attaque {$character->getName()} !".PHP_EOL);
+        if($this->getLifePoints() <= 15 && $this->getManaPoints() > $this->getHealSpell()->getManaCost()){
+            
+            print($this->getName()." se régénère avec ".$this->getHealSpell()->getName().PHP_EOL.PHP_EOL);
+            
+            //ajout des points de vie
+            $this->setLifePoints($this->getLifePoints() + $this->getHealSpell()->getHealPoints());
+            
+            //soustraction du cout en mana
+            $this->setManaPoints($this->getManaPoints() - $this->getHealSpell()->getManaCost());
+            
+        }elseif($this->getManaPoints() > $this->getAttackSpell()->getManaCost()){
+            
+            print($this->getName()." attaque ".$character->getName()." avec ".$this->getAttackSpell()->getName().PHP_EOL.PHP_EOL);
 
-        //character attaque this
-        $character->takesDamagesFrom($this, $this->attackSpell);
+            $character->takesDamagesFrom($this, true);
+            
+            //soustraction du cout en mana
 
+            // print(PHP_EOL.PHP_EOL.PHP_EOL.$this->getAttackSpell()->getManaCost().PHP_EOL.PHP_EOL.PHP_EOL.PHP_EOL);
+            $this->setManaPoints($this->getManaPoints() - $this->getAttackSpell()->getManaCost());
+            
+        }else{
+            print($this->getName()." attaque ".$character->getName()." avec ".$this->getWeapon()->getName().PHP_EOL);
+
+            $character->takesDamagesFrom($this, false);
+
+            
+        }
     }
     
-    public function takesDamagesFrom(Character $character)
+    public function takesDamagesFrom(Character $character, bool $attackWithSpell)
     {
         
-        if(is_null($character->weapon) || $character->getWeapon() != "PhysicalWeapon"){
-
-            // return les dégat sur perso + son spell
-            print($character->getName()." attaque avec son spell".PHP_EOL);
+        if($attackWithSpell && !is_null($character->getAttackSpell())){
+            //il attaque avec son spell
 
             $damages =  (($character->getPhysicalAttackPoints() + $character->getAttackSpell()->getPhysicalDamages()) +
                         ($character->getMagicalAttackPoints() + $character->getAttackSpell()->getMagicalDamages())) *
-                        advantage($this->getType(), $character->getType());
+                        $this->advantage($this->getType(), $character->getType());
 
-        }else{
-            if(rand(0,1) == 1){
-                //si rand = 1, il attaque avec son spell
-                
-                print($character->getName()." attaque avec son spell".PHP_EOL);
+        }elseif(!$attackWithSpell && !is_null($character->getWeapon())){
+            //sinon il attaque avec son arme
 
-                $damages =  (($character->getPhysicalAttackPoints() + $character->getAttackSpell()->getPhysicalDamages()) +
-                            ($character->getMagicalAttackPoints() + $character->getAttackSpell()->getMagicalDamages())) *
+            if($character->getWeapon() == "PhysicalWeapon"){
+                $damages =  (($character->getPhysicalAttackPoints() + $character->getWeapon()->getPhysicalDamages()) +
+                            ($character->getMagicalAttackPoints())) *
                             $this->advantage($this->getType(), $character->getType());
 
             }else{
-                //sinon il attaque avec son arme
-                
-                print($character->getName()." attaque avec son arme".PHP_EOL);
-
-                if($character->getWeapon() == "PhysicalWeapon"){
-                    $damages =  (($character->getPhysicalAttackPoints() + $character->getWeapon()->getPhysicalDamages()) +
-                                ($character->getMagicalAttackPoints())) *
-                                advantage($this->getType(), $character->getType());
-
-                }else{
-                    $damages =  (($character->getPhysicalAttackPoints()) +
-                                ($character->getMagicalAttackPoints() + $character->getWeapon()->getMagicalDamages())) *
-                                advantage($this->getType(), $character->getType());
-                }
+                $damages =  (($character->getPhysicalAttackPoints()) +
+                            ($character->getMagicalAttackPoints() + $character->getWeapon()->getMagicalDamages())) *
+                            $this->advantage($this->getType(), $character->getType());
             }
+        }else{
+            print($character->getName()." attaque avec ses points".PHP_EOL);
+
+            $damages =  ($character->getPhysicalAttackPoints() + ($character->getMagicalAttackPoints())) *
+                        $this->advantage($this->getType(), $character->getType());
         }
         
-        $this->setLifePoints(
-            $this->getLifePoints() - ($damages * (1 - $this->getDefensePoints()))
-        );
+
+        if($this->getManaPoints() > $this->getDefenseSpell()->getManaCost()){
+            //si le personnage a assez de mana pour se défendre avec un spell
+            $this->setLifePoints(
+                $this->getLifePoints() - ($damages * (1 - ($this->getDefensePoints() + $this->getDefenseSpell()->getDefensePoints())))
+            );
+    
+            $this->setManaPoints($this->getManaPoints() - $this->getDefenseSpell()->getManaCost());
+    
+            print($this->getName()." utilise ".$this->getDefenseSpell()->getName(). " pour se défendre !".PHP_EOL);
+
+        }else{
+            $this->setLifePoints(
+                $this->getLifePoints() - ($damages * (1 - $this->getDefensePoints()))
+            );
+        }
+
     }
 
-    // protected function takesPhysicalDamagesFrom(Character $character)
-    // {
-    //     if(is_null($character->weapon) || $character->getWeapon() != "PhysicalWeapon"){
-
-    //         // return les dégat sur perso + son spell
-    //         print($character->getName()." attaque avec son spell".PHP_EOL);
-    //         return ($character->getPhysicalAttackPoints() + $character->attackSpell->getPhysicalDamages());
-
-    //     }else{
-    //         if(rand(0,1) == 1){
-    //             //si rand = 1, il attaque avec son spell
-    //         return ($character->getPhysicalAttackPoints() + $character->attackSpell->getPhysicalDamages());
-
-    //         }else{
-    //             //sinon il attaque avec son arme
-    //         return ($character->getPhysicalAttackPoints() + $character->weapon->getPhysicalDamages());
-    //         }
-    //     }
-    // }
-
-    // protected function takesMagicalDamagesFrom(Character $character)
-    // {
-    //     return $character->getMagicalAttackPoints();
-    // }
 
     public function __toString()
     {

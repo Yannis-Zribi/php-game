@@ -1,4 +1,4 @@
-<?php
+  <?php
 
 
 require_once("./Character/Character.php");
@@ -23,20 +23,20 @@ require_once("./Weapon/PhysicalWeapon.php");
 
 
 //Création des spell
-$thunderstorm = new AttackSpell("Thunderstrom", "This is a thunderstorm.", 8, 16, 14);
-$fireBall = new AttackSpell("Fire ball", "This is a fire ball.", 6, 12, 15);
+$thunderstorm = new AttackSpell("Thunderstrom", "This is a thunderstorm.", 65, 6, 4);
+$fireBall = new AttackSpell("Fire ball", "This is a fire ball.", 55, 2, 5);
 
 $attackSpells = [$thunderstorm, $fireBall];
 
 
-$healingWave = new HealSpell("Healing Wave", "This is a Healing Wave", 8, 15);
-$rapidRegeneration = new HealSpell("Rapid Regeneration", "This is a rapid regeneration", 15, 30);
+$healingWave = new HealSpell("Healing Wave", "This is a Healing Wave", 35, 15);
+$rapidRegeneration = new HealSpell("Rapid Regeneration", "This is a rapid regeneration", 71, 30);
 
 $healSpells = [$healingWave, $rapidRegeneration];
 
 
-$protectiveShield = new DefenseSpell("Protective Shield", "This is a Protective Shield", 10, 4);
-$lightningReflexes = new DefenseSpell("Lightning Reflexes", "This is a Lightning Reflexes", 5, 2);
+$protectiveShield = new DefenseSpell("Protective Shield", "This is a Protective Shield", 25, 0.15);
+$lightningReflexes = new DefenseSpell("Lightning Reflexes", "This is a Lightning Reflexes", 12.5, 0.1);
 
 $defenseSpells = [$protectiveShield, $lightningReflexes];
 
@@ -44,8 +44,8 @@ $defenseSpells = [$protectiveShield, $lightningReflexes];
 $types = ["Feu", "Eau", "Plante"];
 
 //Création des armes
-$baton = new PhysicalWeapon("le Baton", "c'est un baton en bois", 10);
-$baguetteMagique = new MagicalWeapon("la Baguette", "c'est la baguette de merlin l'enchanteur", 10);
+$baton = new PhysicalWeapon("le Baton", "c'est un baton en bois", 6);
+$baguetteMagique = new MagicalWeapon("la Baguette", "c'est la baguette de merlin l'enchanteur", 6);
 
 $weapons = [$baton, $baguetteMagique];
 
@@ -114,17 +114,17 @@ do {
     
     switch ($player) {
         case '1': //archer
-            $player = new Archer($name, $types[$type], 100, 100, 5, 5, (rand(10, 30) / 100), $attackSpells[rand(0,1)], $defenseSpells[rand(0,1)], $healSpells[rand(0,1)], $weapons[$weapon - 1]);
+            $player = new Archer($name, $types[$type - 1], 100, 100, 5, 5, (rand(10, 30) / 100), $attackSpells[rand(0,1)], $defenseSpells[rand(0,1)], $healSpells[rand(0,1)], $weapons[$weapon - 1]);
             $choosed = 1;
             break;
         
         case '2': //soldat
-            $player = new Soldier($name, $types[$type], 100, 100, 10, 0, (rand(10, 30) / 100), $attackSpells[rand(0,1)], $defenseSpells[rand(0,1)], $healSpells[rand(0,1)], $weapons[$weapon - 1]);
+            $player = new Soldier($name, $types[$type - 1], 100, 100, 10, 0, (rand(10, 30) / 100), $attackSpells[rand(0,1)], $defenseSpells[rand(0,1)], $healSpells[rand(0,1)], $weapons[$weapon - 1]);
             $choosed = 1;
             break;
     
         case '3': //sorcier
-            $player = new Wizard($name, $types[$type], 100, 100, 0, 10, (rand(10, 30) / 100), $attackSpells[rand(0,1)], $defenseSpells[rand(0,1)], $healSpells[rand(0,1)], $weapons[$weapon - 1]);
+            $player = new Wizard($name, $types[$type - 1], 100, 100, 0, 10, (rand(10, 30) / 100), $attackSpells[rand(0,1)], $defenseSpells[rand(0,1)], $healSpells[rand(0,1)], $weapons[$weapon - 1]);
             $choosed = 1;
             break;
             
@@ -164,6 +164,7 @@ switch (rand(1,3)) {
 $characters = [$player, $bot];
 
 $play = 1;
+$winner = -1;
 
 while ($play) {
     //affichage des stats
@@ -176,24 +177,30 @@ while ($play) {
 
     //attaques lancées
     $characters[$attacker]->attacks($characters[$attackee]);
-    $characters[$attackee]->attacks($characters[$attacker]);
 
+    if($characters[$attackee]->isDead()){
+        $play = 0;
+        $winner = $attacker;
+    }else{
+
+        $characters[$attackee]->attacks($characters[$attacker]);
+    }
+
+    if($characters[$attacker]->isDead()){
+        $play = 0;
+        $winner = $attackee;
+    }
 
     //regen de la mana
     foreach ($characters as $key => $character) {
         $character->manaRegen();
+       
     }
-
-
 }
 
 $player->drawStats();
 $bot->drawStats();
 
-$player->attacks($bot);
-
-
-$player->drawStats();
-$bot->drawStats();
+print("le gagnant est : ".$characters[$winner]->getName().PHP_EOL);
 
 

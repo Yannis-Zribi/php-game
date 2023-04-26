@@ -6,14 +6,18 @@ Class HealSpell extends Spell{
 
 
     public function __construct(
-        string $name,
-        string $description,
-        float $manaCost,
+        private string $name,
+        private string $description,
+        private float $manaCost,
         private float $healPoints
     ){
         parent::__construct($name, $description, $manaCost);
     }
 
+
+    public function getName(){
+        return $this->name;
+    }
 
     public function getDescription(){
         return $this->description;
