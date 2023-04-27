@@ -140,7 +140,7 @@ class Character{
             $this->lifePoints = round($lifePoints, 2);
         }
     }
-
+    
     public function setManaPoints(float $manaPoints)
     {
         if ($manaPoints < 0) {
