@@ -1,7 +1,6 @@
 <?php
 
 require_once __DIR__ . "/../Type.php";
-require_once __DIR__ . "/../Weapon/HasWeapon.php";
 require_once __DIR__ . "/../Weapon/Weapon.php";
 require_once __DIR__ . "/../Spell/AttackSpell.php";
 require_once __DIR__ . "/../Spell/DefenseSpell.php";
@@ -12,7 +11,7 @@ require_once __DIR__ . "/../Spell/HealSpell.php";
 class Character{
 
     use Type;
-    use HasWeapon;
+
 
     public function __construct(
         protected string $name,
@@ -263,8 +262,10 @@ class Character{
                             ($character->getMagicalAttackPoints() + $character->getWeapon()->getMagicalDamages())) *
                             $this->advantage($this->getType(), $character->getType());
             }
+
+            //sinon si il n'a pas d'arme, il attaque avec ses poings
         }else{
-            print($character->getName()." attaque avec ses points".PHP_EOL);
+            print($character->getName()." attaque avec ses poings".PHP_EOL);
 
             $damages =  ($character->getPhysicalAttackPoints() + ($character->getMagicalAttackPoints())) *
                         $this->advantage($this->getType(), $character->getType());
@@ -280,7 +281,8 @@ class Character{
             $this->setManaPoints($this->getManaPoints() - $this->getDefenseSpell()->getManaCost());
     
             print($this->getName()." utilise ".$this->getDefenseSpell()->getName(). " pour se défendre !".PHP_EOL);
-
+            
+            //sinon il ne se défend pas
         }else{
             $this->setLifePoints(
                 $this->getLifePoints() - ($damages * (1 - $this->getDefensePoints()))

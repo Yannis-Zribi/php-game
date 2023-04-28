@@ -17,27 +17,16 @@ class Archer extends Character
 
     )
     {
-        if ($magicalAttackPoints > $physicalAttackPoints) {
-            throw new Exception("The archer cannot have more magic damages than physical damages.");
-        }
         parent::__construct($name, $type, $lifePoints, $manaPoints, $physicalAttackPoints, $magicalAttackPoints, $defensePoints, $attackSpell, $defenseSpell, $healSpell, $weapon);
     }
 
-    public function getAttackDamages(): float
+    public function getDefensePoints()
     {
-        if (chance(20)) {
-            // echo "Coup critique !".PHP_EOL;
-            return $this->physicalAttackPoints * 1.2;
-        }
-        return parent::getAttackDamages();
-    }
-
-    public function getDefenseRatio()
-    {
-        if (chance(10)) {
-            // echo "Esquive !".PHP_EOL;
+        //1 chance sur 10 d'esquiver une attaque
+        if (rand(1,10) == 1) {
+            print("{$this->getName()} a esquivé !".PHP_EOL);
             return 1;
         }
-        return parent::getDefenseRatio();
+        return parent::getDefensePoints();
     }
 }

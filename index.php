@@ -49,18 +49,18 @@ $baguetteMagique = new MagicalWeapon("la Baguette", "c'est la baguette de merlin
 
 $weapons = [$baton, $baguetteMagique];
 
-//Création des Personnages
-// $archer = new Archer("Miguel", "Feu", 80, 100, 10, 10, 0.2, $fireBall, $protectiveShield, $rapidRegeneration, $baton);
-// $soldier = new Character("Hervé", "Eau", 100, 100, 8, 10, 0.3, $thunderstorm, $lightningReflexes, $healingWave, $baton);
-// $wizard = new Wizard("Damien","Plante",100,100,6,10,0.2, $thunderstorm, $protectiveShield, $healingWave, $baguetteMagique);
+
 
 
 //#####  Choix du personnage  #####
 
 //choix du nom
-print(PHP_EOL."Veuillez choisir votre nom :  ".PHP_EOL.PHP_EOL);
+do{
+    print(PHP_EOL."Veuillez choisir votre nom :  ".PHP_EOL.PHP_EOL);
+    
+    $name = (readline());
 
-$name = (readline());
+}while($name == "");
 
 
 //choix du type
@@ -202,7 +202,7 @@ while ($play) {
     }
 }
 
-
+//fin de partie
 print(PHP_EOL.PHP_EOL."PARTIE TERMINÉE ====================================================".PHP_EOL);
 $player->drawStats();
 $bot->drawStats();

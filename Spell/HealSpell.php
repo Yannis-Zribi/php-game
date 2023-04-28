@@ -4,7 +4,7 @@ require_once("./Spell/Spell.php");
 
 Class HealSpell extends Spell{
 
-
+    //Constructeur
     public function __construct(
         private string $name,
         private string $description,
@@ -14,7 +14,7 @@ Class HealSpell extends Spell{
         parent::__construct($name, $description, $manaCost);
     }
 
-
+    //Getters
     public function getName(){
         return $this->name;
     }
