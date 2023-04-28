@@ -50,7 +50,7 @@ $baguetteMagique = new MagicalWeapon("la Baguette", "c'est la baguette de merlin
 $weapons = [$baton, $baguetteMagique];
 
 //Création des Personnages
-$archer = new Archer("Miguel", "Feu", 80, 100, 10, 10, 0.2, $fireBall, $protectiveShield, $rapidRegeneration, $baton);
+// $archer = new Archer("Miguel", "Feu", 80, 100, 10, 10, 0.2, $fireBall, $protectiveShield, $rapidRegeneration, $baton);
 // $soldier = new Character("Hervé", "Eau", 100, 100, 8, 10, 0.3, $thunderstorm, $lightningReflexes, $healingWave, $baton);
 // $wizard = new Wizard("Damien","Plante",100,100,6,10,0.2, $thunderstorm, $protectiveShield, $healingWave, $baguetteMagique);
 
@@ -165,8 +165,12 @@ $characters = [$player, $bot];
 
 $play = 1;
 $winner = -1;
+$nTour = 1;
 
 while ($play) {
+    print(PHP_EOL."TOUR N°{$nTour} ====================================================".PHP_EOL);
+    $nTour++;
+
     //affichage des stats
     $player->drawStats();
     $bot->drawStats();
@@ -198,6 +202,8 @@ while ($play) {
     }
 }
 
+
+print(PHP_EOL.PHP_EOL."PARTIE TERMINÉE ====================================================".PHP_EOL);
 $player->drawStats();
 $bot->drawStats();
 

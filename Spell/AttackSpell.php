@@ -4,7 +4,7 @@ require_once("./Spell/Spell.php");
 
 Class AttackSpell extends Spell{
 
-
+    //Constructeur
     public function __construct(
         private string $name,
         private string $description,
@@ -13,7 +13,7 @@ Class AttackSpell extends Spell{
         private float $magicalDamages,
     ){}
 
-
+    //Getters
     public function getName(){
         return $this->name;
     }

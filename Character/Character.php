@@ -26,6 +26,8 @@ class Character{
         protected DefenseSpell $defenseSpell,
         protected HealSpell $healSpell,
         protected ?Weapon $weapon = NULL,
+        protected int $xpPoints = 0,
+        protected int $level = 1
 
     ){}
 
@@ -44,6 +46,10 @@ class Character{
 
     public function getManaPoints(){
         return $this->manaPoints;
+    }
+
+    public function getLevel(){
+        return $this->level;
     }
 
     public function getPhysicalAttackPoints(){
@@ -83,11 +89,16 @@ class Character{
 
     }
 
+    public function canLvlUp(){
+        if($this->xpPoints >= 10){
+            $this->lvlUp();
+        }
+    }
 
     function drawStats(){
 
         //affichage de son nom
-        print($this->getName().PHP_EOL);
+        print(PHP_EOL.$this->getName()." | LVL : ".$this->getLevel().PHP_EOL);
 
         //affichage de la vie
         $life = (int)($this->getLifePoints() / 10) + 1;
@@ -132,6 +143,16 @@ class Character{
         );
     }
 
+    public function gainXp(){
+        //ajout d'XP
+        $xpGain = rand(1, 4);
+        $this->xpPoints += $xpGain;
+        print("{$this->getName()} a gagné {$xpGain} XP !".PHP_EOL);
+
+        //vérification du potentiel lvlup
+        $this->canLvlUp();
+    }
+
     public function setLifePoints(float $lifePoints)
     {
         if ($lifePoints < 0) {
@@ -154,8 +175,36 @@ class Character{
         $this->manaPoints += 10;
     }
 
+    public function lvlUp(){
+
+        
+        $this->xpPoints -= 10;
+        $this->level += 1;
+
+        $random = rand(0,2);
+
+        if($random == 0){
+            //1 chance sur 3 d'augmenter les points de vie
+            $this->lifePoints *= 1.2;
+            print($this->getName()." vient de monter au niveau ".$this->getLevel()." et a augmenter ses points de vie !".PHP_EOL);
+
+        }elseif ($random == 1) {
+            //1 chance sur 3 d'augmenter les points d'attaque physique
+            $this->physicalAttackPoints *= 1.1;
+            print($this->getName()." vient de monter au niveau ".$this->getLevel()." et a augmenter ses points d'attaque physique !".PHP_EOL);
+            
+        }else{
+            //1 chance sur 3 d'augmenter les points d'attaque magique
+            $this->magicalAttackPoints *= 1.1;
+            print($this->getName()." vient de monter au niveau ".$this->getLevel()." et a augmenter ses points d'attaque magique !".PHP_EOL);
+
+        }
+
+    }
+
     public function attacks(Character $character)
     {
+        //si le joueur n'a pas assez de vie mais a assez de mana pour se régénérer
         if($this->getLifePoints() <= 15 && $this->getManaPoints() > $this->getHealSpell()->getManaCost()){
             
             print($this->getName()." se régénère avec ".$this->getHealSpell()->getName().PHP_EOL.PHP_EOL);
@@ -166,6 +215,7 @@ class Character{
             //soustraction du cout en mana
             $this->setManaPoints($this->getManaPoints() - $this->getHealSpell()->getManaCost());
             
+        //si le joueur a assez de mana pour attaquer
         }elseif($this->getManaPoints() > $this->getAttackSpell()->getManaCost()){
             
             print($this->getName()." attaque ".$character->getName()." avec ".$this->getAttackSpell()->getName().PHP_EOL.PHP_EOL);
@@ -174,14 +224,18 @@ class Character{
             
             //soustraction du cout en mana
 
-            // print(PHP_EOL.PHP_EOL.PHP_EOL.$this->getAttackSpell()->getManaCost().PHP_EOL.PHP_EOL.PHP_EOL.PHP_EOL);
             $this->setManaPoints($this->getManaPoints() - $this->getAttackSpell()->getManaCost());
+
+            $this->gainXp();
+
             
+        //sinon il attaque avec son arme
         }else{
             print($this->getName()." attaque ".$character->getName()." avec ".$this->getWeapon()->getName().PHP_EOL);
 
             $character->takesDamagesFrom($this, false);
 
+            $this->gainXp();
             
         }
     }

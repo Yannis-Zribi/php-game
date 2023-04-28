@@ -3,6 +3,7 @@
 
 abstract class Weapon{
 
+    //Constructeur
     public function __construct(
         protected string $name,
         protected string $description,
@@ -10,6 +11,7 @@ abstract class Weapon{
 
     }
 
+    //Getters
     public function getName(){
         return $this->name;
     }
